@@ -1,0 +1,51 @@
+Binding to URL.
+
+    var Comments = new jQuery.Resource({url: 'http://192.168.18.17:32030/commentable/comments'});
+
+Creating comment.
+
+    Comments.create({commentable_id: 10, commentable_type:'photo', text: "dasd"}).send();
+
+    POST /comments
+    commentable_id=10&commentable_type=photo&text=dasd
+
+    
+Getting list.
+
+    Comments.index({commentable_id: 10, commentable_type:'photo'}).send();
+
+    GET /comments/?commentable_id=10&commentable_type=photo
+
+Getting one comment.
+
+    Comments.get({id: 10}).send();
+
+    GET /comments/10
+
+Updating one comment.
+
+    Comments.update({id: 10, text:"aaa"}).send();
+
+    POST /comments/10?_method=put
+    text=aaa
+
+Deleting comment.
+
+    Comments.destroy({id: 10}).send();
+
+    POST /comments/10?_method_=delete
+
+Rails compatibility.
+
+Optional parameter model is for Rails compatibility. Example:
+
+    Posts = new jQuery.Resource({url: 'http://localhost:3000/posts', model: 'post'});
+    Posts.create({ title: 'hey!', body: 'post!' }).send();
+
+    POST /posts
+
+    post%5Btitle%5D=hey!&post%5Bbody%5D=post!
+
+More examples: https://gist.github.com/360967
+
+
