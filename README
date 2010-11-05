@@ -1,8 +1,9 @@
-Binding to URL.
+Binding to URL
 
     var Comments = new jQuery.Resource({url: 'http://192.168.18.17:32030/commentable/comments'});
 
-Creating comment.
+
+Creating comment
 
     Comments.create({commentable_id: 10, commentable_type:'photo', text: "dasd"}).send();
 
@@ -10,32 +11,32 @@ Creating comment.
     commentable_id=10&commentable_type=photo&text=dasd
 
     
-Getting list.
+Getting list
 
     Comments.index({commentable_id: 10, commentable_type:'photo'}).send();
 
     GET /comments/?commentable_id=10&commentable_type=photo
 
-Getting one comment.
+Getting one comment
 
     Comments.get({id: 10}).send();
 
     GET /comments/10
 
-Updating one comment.
+Updating one comment
 
     Comments.update({id: 10, text:"aaa"}).send();
 
     POST /comments/10?_method=put
     text=aaa
 
-Deleting comment.
+Deleting comment
 
     Comments.destroy({id: 10}).send();
 
     POST /comments/10?_method_=delete
 
-Rails compatibility.
+Rails compatibility
 
 Optional parameter model is for Rails compatibility. Example:
 
@@ -45,6 +46,22 @@ Optional parameter model is for Rails compatibility. Example:
     POST /posts
 
     post%5Btitle%5D=hey!&post%5Bbody%5D=post!
+
+Request object
+
+The request object can be used to reduce code duplication. Example:
+
+    var Points = new jQuery.Resource({
+        url: 'http://192.168.18.17:32030/points',
+        success: function(result) { console.debug('Point created:', result) }
+    });
+
+    req = Points.create({ title: 'here!', x: 10 });
+
+    for(var i=0; i < 0; i++) {
+        req.params.y = i*10;
+        req.send();
+    }
 
 More examples: https://gist.github.com/360967
 
