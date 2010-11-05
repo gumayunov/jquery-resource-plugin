@@ -38,14 +38,12 @@ jQuery.extend(jQuery.ResourceRequest.prototype, {
     if (!options) options = {};
     var d_options = this.default_options;
 
-    // create temporary options for current request
     jQuery.each(d_options, function(i) {
       if (options[i] == undefined) {
         options[i] = d_options[i];
       }
     });
 
-    //console.debug(options);
     jQuery.ajax(options);
 
     return this;
@@ -100,6 +98,7 @@ jQuery.extend(jQuery.Resource.prototype, {
 
   get: function(params)
   {
+    if (!jQuery.isPlainObject(params)) params = {id: params};
     return this._new_request('GET',  params);
   },
 
@@ -110,6 +109,7 @@ jQuery.extend(jQuery.Resource.prototype, {
 
   destroy: function(params)
   {
+    if (!jQuery.isPlainObject(params)) params = {id: params};
     return this._new_request('DELETE', params);
   },
   
@@ -124,25 +124,24 @@ jQuery.extend(jQuery.Resource.prototype, {
       delete params['id'];
     }
 
-    var need_wrap = (method == 'POST' || method == 'PUT');
-
-    if (method != 'GET' && method != 'POST') {
-      params['_method'] = method;
-      method = 'POST';
-    }
-
     var request_options = this.default_options;
-    
-    request_options.type = method; // method is type in jQuery
-    request_options.url = url;
     
     var default_params = this.default_params;
     jQuery.each(default_params, function(i){
       if (params[i] == undefined) params[i] = default_params[i];
     });
     
-    if (need_wrap) params = this._wrap_params(params);
+    if (method == 'POST' || method == 'PUT') {
+        params = this._wrap_params(params);
+    }
+    
+    if (method != 'GET' && method != 'POST') {
+      params['_method'] = method;
+      method = 'POST';
+    }
 
+    request_options.type = method; // method is type in jQuery
+    request_options.url = url;
     request_options.data = params; // params is data in jQuery
 
     //console.debug(request_options);
